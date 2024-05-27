@@ -8,6 +8,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddRouting(x => x.LowercaseUrls = true);
+builder.Services.AddControllers();
 
 var app = builder.Build();
 

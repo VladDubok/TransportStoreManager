@@ -14,7 +14,9 @@ public class Product
     public ProductType ProductType { get; set; }
     public long CustomerId { get; set; }
     public Customer Customer { get; set; }
+    public long CurrencyId { get; set; }
+    public Currency Currency { get; set; }
     
     public IEnumerable<ProductPhoto> ProductPhotos { get; set; }
-    public IEnumerable<Currency> Currencies { get; set; }
+    public IEnumerable<ProductPromotion> ProductPromotions { get; set; }
 }

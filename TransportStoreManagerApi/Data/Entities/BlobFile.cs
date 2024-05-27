@@ -1,6 +1,6 @@
 namespace TransportStoreManagerApi.Data.Entities;
 
-public class File
+public class BlobFile
 {
     public long Id { get; set; }
     public byte[] Data { get; set; }
