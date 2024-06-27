@@ -12,8 +12,8 @@ using TransportStoreManagerApi.Data;
 namespace TransportStoreManagerApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240527073846_Init")]
-    partial class Init
+    [Migration("20240627143214_Add_DataSeed")]
+    partial class Add_DataSeed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,7 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BlobFile");
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Brand", b =>
@@ -60,7 +60,7 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Currency", b =>
@@ -77,7 +77,24 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currency");
+                    b.ToTable("Currencies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "USD"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "EUR"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "UAH"
+                        });
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Customer", b =>
@@ -94,7 +111,7 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.OutboxMessages", b =>
@@ -181,7 +198,7 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasIndex("ProductTypeId1");
 
-                    b.ToTable("Product");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPhoto", b =>
@@ -214,7 +231,7 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasIndex("ProductId1");
 
-                    b.ToTable("ProductPhoto");
+                    b.ToTable("ProductPhotos");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPromotion", b =>
@@ -247,7 +264,7 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasIndex("PromotionId1");
 
-                    b.ToTable("ProductPromotion");
+                    b.ToTable("ProductPromotions");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPromotionHistory", b =>
@@ -285,7 +302,7 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasIndex("ProductPromotionId1");
 
-                    b.ToTable("ProductPromotionHistory");
+                    b.ToTable("ProductPromotionHistories");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductType", b =>
@@ -302,7 +319,19 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductType");
+                    b.ToTable("ProductTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "Car"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "Motorcycle"
+                        });
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Promotion", b =>
@@ -324,7 +353,7 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promotion");
+                    b.ToTable("Promotions");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Product", b =>

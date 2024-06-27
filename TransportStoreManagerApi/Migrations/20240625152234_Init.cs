@@ -12,20 +12,7 @@ namespace TransportStoreManagerApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BlobFile",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BlobFile", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Brand",
+                name: "Brands",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -35,11 +22,11 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Brand", x => x.Id);
+                    table.PrimaryKey("PK_Brands", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Currency",
+                name: "Currencies",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -48,11 +35,11 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Currency", x => x.Id);
+                    table.PrimaryKey("PK_Currencies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customer",
+                name: "Customers",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -61,7 +48,20 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customer", x => x.Id);
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Files",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Files", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,7 +79,7 @@ namespace TransportStoreManagerApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductType",
+                name: "ProductTypes",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -88,11 +88,11 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductType", x => x.Id);
+                    table.PrimaryKey("PK_ProductTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Promotion",
+                name: "Promotions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -103,11 +103,11 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Promotion", x => x.Id);
+                    table.PrimaryKey("PK_Promotions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -127,55 +127,55 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Product_Brand_BrandId",
+                        name: "FK_Products_Brands_BrandId",
                         column: x => x.BrandId,
-                        principalTable: "Brand",
+                        principalTable: "Brands",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Brand_BrandId1",
+                        name: "FK_Products_Brands_BrandId1",
                         column: x => x.BrandId1,
-                        principalTable: "Brand",
+                        principalTable: "Brands",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Product_Currency_CurrencyId",
+                        name: "FK_Products_Currencies_CurrencyId",
                         column: x => x.CurrencyId,
-                        principalTable: "Currency",
+                        principalTable: "Currencies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Currency_CurrencyId1",
+                        name: "FK_Products_Currencies_CurrencyId1",
                         column: x => x.CurrencyId1,
-                        principalTable: "Currency",
+                        principalTable: "Currencies",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Product_Customer_CustomerId",
+                        name: "FK_Products_Customers_CustomerId",
                         column: x => x.CustomerId,
-                        principalTable: "Customer",
+                        principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_Customer_CustomerId1",
+                        name: "FK_Products_Customers_CustomerId1",
                         column: x => x.CustomerId1,
-                        principalTable: "Customer",
+                        principalTable: "Customers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Product_ProductType_ProductTypeId",
+                        name: "FK_Products_ProductTypes_ProductTypeId",
                         column: x => x.ProductTypeId,
-                        principalTable: "ProductType",
+                        principalTable: "ProductTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Product_ProductType_ProductTypeId1",
+                        name: "FK_Products_ProductTypes_ProductTypeId1",
                         column: x => x.ProductTypeId1,
-                        principalTable: "ProductType",
+                        principalTable: "ProductTypes",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductPhoto",
+                name: "ProductPhotos",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -187,33 +187,33 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductPhoto", x => x.Id);
+                    table.PrimaryKey("PK_ProductPhotos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductPhoto_BlobFile_BlobFileId",
+                        name: "FK_ProductPhotos_Files_BlobFileId",
                         column: x => x.BlobFileId,
-                        principalTable: "BlobFile",
+                        principalTable: "Files",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ProductPhoto_BlobFile_FileId",
+                        name: "FK_ProductPhotos_Files_FileId",
                         column: x => x.FileId,
-                        principalTable: "BlobFile",
+                        principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductPhoto_Product_ProductId",
+                        name: "FK_ProductPhotos_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductPhoto_Product_ProductId1",
+                        name: "FK_ProductPhotos_Products_ProductId1",
                         column: x => x.ProductId1,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductPromotion",
+                name: "ProductPromotions",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -225,33 +225,33 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductPromotion", x => x.Id);
+                    table.PrimaryKey("PK_ProductPromotions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductPromotion_Product_ProductId",
+                        name: "FK_ProductPromotions_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductPromotion_Product_ProductId1",
+                        name: "FK_ProductPromotions_Products_ProductId1",
                         column: x => x.ProductId1,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ProductPromotion_Promotion_PromotionId",
+                        name: "FK_ProductPromotions_Promotions_PromotionId",
                         column: x => x.PromotionId,
-                        principalTable: "Promotion",
+                        principalTable: "Promotions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductPromotion_Promotion_PromotionId1",
+                        name: "FK_ProductPromotions_Promotions_PromotionId1",
                         column: x => x.PromotionId1,
-                        principalTable: "Promotion",
+                        principalTable: "Promotions",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductPromotionHistory",
+                name: "ProductPromotionHistories",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -266,109 +266,109 @@ namespace TransportStoreManagerApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductPromotionHistory", x => x.Id);
+                    table.PrimaryKey("PK_ProductPromotionHistories", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductPromotionHistory_ProductPromotion_ProductPromotionId",
+                        name: "FK_ProductPromotionHistories_ProductPromotions_ProductPromotionId",
                         column: x => x.ProductPromotionId,
-                        principalTable: "ProductPromotion",
+                        principalTable: "ProductPromotions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductPromotionHistory_ProductPromotion_ProductPromotionId1",
+                        name: "FK_ProductPromotionHistories_ProductPromotions_ProductPromotionId1",
                         column: x => x.ProductPromotionId1,
-                        principalTable: "ProductPromotion",
+                        principalTable: "ProductPromotions",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Product_BrandId",
-                table: "Product",
-                column: "BrandId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_BrandId1",
-                table: "Product",
-                column: "BrandId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_CurrencyId",
-                table: "Product",
-                column: "CurrencyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_CurrencyId1",
-                table: "Product",
-                column: "CurrencyId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_CustomerId",
-                table: "Product",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_CustomerId1",
-                table: "Product",
-                column: "CustomerId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_ProductTypeId",
-                table: "Product",
-                column: "ProductTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Product_ProductTypeId1",
-                table: "Product",
-                column: "ProductTypeId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductPhoto_BlobFileId",
-                table: "ProductPhoto",
+                name: "IX_ProductPhotos_BlobFileId",
+                table: "ProductPhotos",
                 column: "BlobFileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPhoto_FileId",
-                table: "ProductPhoto",
+                name: "IX_ProductPhotos_FileId",
+                table: "ProductPhotos",
                 column: "FileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPhoto_ProductId",
-                table: "ProductPhoto",
+                name: "IX_ProductPhotos_ProductId",
+                table: "ProductPhotos",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPhoto_ProductId1",
-                table: "ProductPhoto",
+                name: "IX_ProductPhotos_ProductId1",
+                table: "ProductPhotos",
                 column: "ProductId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotion_ProductId",
-                table: "ProductPromotion",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotion_ProductId1",
-                table: "ProductPromotion",
-                column: "ProductId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotion_PromotionId",
-                table: "ProductPromotion",
-                column: "PromotionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotion_PromotionId1",
-                table: "ProductPromotion",
-                column: "PromotionId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotionHistory_ProductPromotionId",
-                table: "ProductPromotionHistory",
+                name: "IX_ProductPromotionHistories_ProductPromotionId",
+                table: "ProductPromotionHistories",
                 column: "ProductPromotionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotionHistory_ProductPromotionId1",
-                table: "ProductPromotionHistory",
+                name: "IX_ProductPromotionHistories_ProductPromotionId1",
+                table: "ProductPromotionHistories",
                 column: "ProductPromotionId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPromotions_ProductId",
+                table: "ProductPromotions",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPromotions_ProductId1",
+                table: "ProductPromotions",
+                column: "ProductId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPromotions_PromotionId",
+                table: "ProductPromotions",
+                column: "PromotionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPromotions_PromotionId1",
+                table: "ProductPromotions",
+                column: "PromotionId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_BrandId",
+                table: "Products",
+                column: "BrandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_BrandId1",
+                table: "Products",
+                column: "BrandId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CurrencyId",
+                table: "Products",
+                column: "CurrencyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CurrencyId1",
+                table: "Products",
+                column: "CurrencyId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CustomerId",
+                table: "Products",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CustomerId1",
+                table: "Products",
+                column: "CustomerId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ProductTypeId",
+                table: "Products",
+                column: "ProductTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_ProductTypeId1",
+                table: "Products",
+                column: "ProductTypeId1");
         }
 
         /// <inheritdoc />
@@ -378,34 +378,34 @@ namespace TransportStoreManagerApi.Migrations
                 name: "OutboxMessages");
 
             migrationBuilder.DropTable(
-                name: "ProductPhoto");
+                name: "ProductPhotos");
 
             migrationBuilder.DropTable(
-                name: "ProductPromotionHistory");
+                name: "ProductPromotionHistories");
 
             migrationBuilder.DropTable(
-                name: "BlobFile");
+                name: "Files");
 
             migrationBuilder.DropTable(
-                name: "ProductPromotion");
+                name: "ProductPromotions");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Promotion");
+                name: "Promotions");
 
             migrationBuilder.DropTable(
-                name: "Brand");
+                name: "Brands");
 
             migrationBuilder.DropTable(
-                name: "Currency");
+                name: "Currencies");
 
             migrationBuilder.DropTable(
-                name: "Customer");
+                name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "ProductType");
+                name: "ProductTypes");
         }
     }
 }

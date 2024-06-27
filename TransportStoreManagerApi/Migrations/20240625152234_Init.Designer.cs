@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TransportStoreManagerApi.Data;
 
@@ -11,9 +12,11 @@ using TransportStoreManagerApi.Data;
 namespace TransportStoreManagerApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240625152234_Init")]
+    partial class Init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,23 +78,6 @@ namespace TransportStoreManagerApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Currencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "USD"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Name = "EUR"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Name = "UAH"
-                        });
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Customer", b =>
@@ -317,18 +303,6 @@ namespace TransportStoreManagerApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProductTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "Car"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Name = "Motorcycle"
-                        });
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Promotion", b =>
