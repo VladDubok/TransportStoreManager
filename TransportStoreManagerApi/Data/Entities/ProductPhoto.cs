@@ -1,6 +1,6 @@
 namespace TransportStoreManagerApi.Data.Entities;
 
-public class ProductPhoto
+public class ProductPhoto : BaseEntity
 {
     public long Id { get; set; }
     

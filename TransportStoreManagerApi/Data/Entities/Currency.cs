@@ -1,6 +1,6 @@
 namespace TransportStoreManagerApi.Data.Entities;
 
-public class Currency
+public class Currency : BaseEntity
 {
     public long Id { get; set; }
     public string Name { get; set; }

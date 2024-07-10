@@ -1,6 +1,6 @@
 namespace TransportStoreManagerApi.Data.Entities;
 
-public class ProductPromotionHistory
+public class ProductPromotionHistory : BaseEntity
 {
     public long Id { get; set; }
     public int Percent { get; set; }

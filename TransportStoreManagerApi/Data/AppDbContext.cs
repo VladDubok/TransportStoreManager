@@ -9,7 +9,7 @@ public class AppDbContext : DbContext
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<BlobFile> Files { get; set; }
-    public DbSet<OutboxMessages> OutboxMessages { get; set; }
+    public DbSet<OutboxMessage> OutboxMessages { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductPhoto> ProductPhotos { get; set; }
     public DbSet<ProductPromotion> ProductPromotions { get; set; }
@@ -58,7 +58,7 @@ public class AppDbContext : DbContext
             .WithOne(x => x.BlobFile)
             .HasForeignKey(x => x.FileId);
 
-        modelBuilder.Entity<OutboxMessages>()
+        modelBuilder.Entity<OutboxMessage>()
             .HasKey(x => x.Id);
 
         modelBuilder.Entity<Product>()

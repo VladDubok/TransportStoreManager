@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TransportStoreManagerApi.Data.Entities;
 using TransportStoreManagerApi.Models.Requests;
 using TransportStoreManagerApi.Repositories;
+using TransportStoreManagerApi.Repositories.Interfaces;
 
 namespace TransportStoreManagerApi.Controllers;
 

@@ -1,6 +1,9 @@
+using Hangfire;
 using Microsoft.EntityFrameworkCore;
 using TransportStoreManagerApi.Data;
+using TransportStoreManagerApi.Handlers;
 using TransportStoreManagerApi.Managers;
+using TransportStoreManagerApi.Managers.Interfaces;
 using TransportStoreManagerApi.Repositories;
 using TransportStoreManagerApi.Repositories.Interfaces;
 
@@ -10,11 +13,17 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services
+    .AddHangfire(configuration => configuration.UseSqlServerStorage(connectionString))
+    .AddHangfireServer();
+
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddScoped<IProductManager, ProductManager>();
 builder.Services.AddScoped<IFileManager, FileManager>();
+
+builder.Services.AddScoped<IOutboxMessageProcessHandler, OutboxMessageProcessHandler>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -23,14 +32,17 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHangfireDashboard();
 }
 
 app.UseRouting();
+app.MapHangfireDashboard();
 app.MapControllers();
 app.UseHttpsRedirection();
 app.Run();
+
+RecurringJob.AddOrUpdate(() => app.Services.GetRequiredService<IOutboxMessageProcessHandler>().Handle(), Cron.Minutely);

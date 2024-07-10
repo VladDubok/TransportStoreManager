@@ -1,6 +1,6 @@
 namespace TransportStoreManagerApi.Data.Entities;
 
-public class ProductPromotion
+public class ProductPromotion : BaseEntity
 {
     public long Id { get; set; }
     
