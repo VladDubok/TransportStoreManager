@@ -6,7 +6,7 @@ namespace TransportStoreManagerApi.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<Brand> Brands { get; set; }
-    public DbSet<Currency> Currencies { get; set; }
+    public DbSet<ProductPrice> Currencies { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<BlobFile> Files { get; set; }
     public DbSet<OutboxMessage> OutboxMessages { get; set; }
@@ -34,13 +34,8 @@ public class AppDbContext : DbContext
             .WithOne(x => x.Brand)
             .HasForeignKey(x => x.BrandId);
 
-        modelBuilder.Entity<Currency>()
+        modelBuilder.Entity<ProductPrice>()
             .HasKey(x => x.Id);
-
-        modelBuilder.Entity<Currency>()
-            .HasMany<Product>()
-            .WithOne(x => x.Currency)
-            .HasForeignKey(x => x.CurrencyId);
 
         modelBuilder.Entity<Customer>()
             .HasKey(x => x.Id);
@@ -71,6 +66,11 @@ public class AppDbContext : DbContext
 
         modelBuilder.Entity<Product>()
             .HasMany<ProductPromotion>()
+            .WithOne(x => x.Product)
+            .HasForeignKey(x => x.ProductId);
+        
+        modelBuilder.Entity<Product>()
+            .HasMany<ProductPrice>()
             .WithOne(x => x.Product)
             .HasForeignKey(x => x.ProductId);
 
@@ -107,13 +107,7 @@ public class AppDbContext : DbContext
         #endregion
 
         #region Data Seed
-
-        modelBuilder.Entity<Currency>()
-            .HasData(
-                new Currency { Id = 1, Name = "USD" },
-                new Currency { Id = 2, Name = "EUR" },
-                new Currency { Id = 3, Name = "UAH" });
-
+        
         modelBuilder.Entity<ProductType>()
             .HasData(
                 new ProductType { Id = 1, Name = "Car" },

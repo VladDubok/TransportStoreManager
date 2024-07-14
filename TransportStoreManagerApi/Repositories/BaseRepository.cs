@@ -16,7 +16,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         _context = context;
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? expression)
+    public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? expression)
     {
         var query = _context.Set<T>().AsQueryable();
 

@@ -19,7 +19,7 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         var customerProducts = await _context.Products
             .AsNoTracking()
             .Include(x => x.Brand)
-            .Include(x => x.Currency)
+            .Include(x => x.ProductPrices)
             .Include(x => x.ProductType)
             .Where(x => x.CustomerId == customerId)
             .ToListAsync();

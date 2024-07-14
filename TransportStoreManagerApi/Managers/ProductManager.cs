@@ -1,5 +1,6 @@
 using System.Text.Json;
 using AutoMapper;
+using TransportStoreManagerApi.Data;
 using TransportStoreManagerApi.Data.Entities;
 using TransportStoreManagerApi.Data.Entities.Enums;
 using TransportStoreManagerApi.Managers.Interfaces;
@@ -16,21 +17,31 @@ public class ProductManager : IProductManager
     private readonly IProductRepository _productRepository;
     private readonly IBaseRepository<BlobFile> _fileRepository;
     private readonly IBaseRepository<OutboxMessage> _outboxRepository;
-    private readonly IBaseRepository<Customer?> _customerRepository;
+    private readonly IBaseRepository<Customer> _customerRepository;
+    private readonly IBrandManager _brandManager;
+    private readonly IPriceManager _priceManager;
+    private readonly IBaseRepository<ProductType> _productTypeRepository;
     private readonly IMapper _mapper;
+    private readonly AppDbContext _context;
 
     public ProductManager(
         IProductRepository productRepository,
         IMapper mapper,
         IBaseRepository<BlobFile> fileRepository,
         IBaseRepository<OutboxMessage> outboxRepository,
-        IBaseRepository<Customer?> customerRepository)
+        IBaseRepository<Customer> customerRepository,
+        IBaseRepository<ProductType> productTypeRepository,
+        IBrandManager brandManager, IPriceManager priceManager, AppDbContext context)
     {
         _productRepository = productRepository;
         _mapper = mapper;
         _fileRepository = fileRepository;
         _outboxRepository = outboxRepository;
         _customerRepository = customerRepository;
+        _productTypeRepository = productTypeRepository;
+        _brandManager = brandManager;
+        _priceManager = priceManager;
+        _context = context;
     }
 
     public async Task CreateProductAsync(AddProductRequestModel model)
@@ -82,11 +93,28 @@ public class ProductManager : IProductManager
         await _outboxRepository.AddAsync(message);
     }
 
-    public Task UpdateFromFile(IEnumerable<FileProductDto> products)
+    public async Task UpdateFromFile(IEnumerable<UploadFileProductDto> products)
     {
-        var toInsert = products.Where(x => x.Id is null).ToList();
-        _productRepository.AddRangeAsync(toInsert);
+        using var transaction = await _context.Database.BeginTransactionAsync();
+        
+        try
+        {
+            foreach (var productDto in products)
+            {
+                var productTypeId = await _productTypeRepository.GetByIdAsync(productDto.ProductTypeId);
+                
+                var brandId = await _brandManager.GetOrCreate(productDto.BrandName, productDto.BrandModel);
 
-        var toUpdate = products.Where(x => x.Id is not null).ToList();
+                var productId = 0;
+                
+                await _priceManager.CreatePricesAsync(productDto.CurrencyCode, productDto.Price, productId);
+            }
+            
+            await transaction.CommitAsync();
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+        }
     }
 }

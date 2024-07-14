@@ -30,7 +30,7 @@ public class OutboxMessageManager : IOutboxMessageManager
      private async Task ProcessProductFileUploadMessageHandler(OutboxMessage message)
     {
         var productFileUploadedMessage = JsonSerializer.Deserialize<ProductFileUploadedMessage>(message.Data);
-        var products = await _fileManager.GetDataFromCsv<FileProductDto>(productFileUploadedMessage.FileId);
+        var products = await _fileManager.GetDataFromCsv<UploadFileProductDto>(productFileUploadedMessage.FileId);
         
         foreach (var fileProductDto in products)
         {

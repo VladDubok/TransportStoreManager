@@ -5,7 +5,6 @@ public class Product : BaseEntity
     public long Id { get; set; }
     public string Color { get; set; }
     public int Year { get; set; }
-    public decimal Price { get; set; }
     public long Count { get; set; }
     
     public long BrandId { get; set; }
@@ -14,9 +13,8 @@ public class Product : BaseEntity
     public ProductType ProductType { get; set; }
     public long CustomerId { get; set; }
     public Customer Customer { get; set; }
-    public long CurrencyId { get; set; }
-    public Currency Currency { get; set; }
     
+    public IEnumerable<ProductPrice> ProductPrices { get; set; }
     public IEnumerable<ProductPhoto> ProductPhotos { get; set; }
     public IEnumerable<ProductPromotion> ProductPromotions { get; set; }
 }
