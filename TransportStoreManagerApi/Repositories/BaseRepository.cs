@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using TransportStoreManagerApi.Data;
 using TransportStoreManagerApi.Data.Entities;
 using TransportStoreManagerApi.Repositories.Interfaces;
@@ -51,14 +52,13 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         await _context.SaveChangesAsync();
     }
 
-    public async Task<T> GetByIdAsync(long id)
+    public async Task<T?> GetByIdAsync(long id)
     {
         var result = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
 
         if (result is null)
         {
-            // TODO: Create EntityNotFoundException
-            throw new Exception(string.Format($"Entity {0} with id: {1} was not found", typeof(T).Name, id));
+            Log.Information(string.Format($"Entity {0} with id: {1} was not found", typeof(T).Name, id));
         }
 
         return result;

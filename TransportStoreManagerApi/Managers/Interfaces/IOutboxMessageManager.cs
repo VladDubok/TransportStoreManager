@@ -4,5 +4,5 @@ namespace TransportStoreManagerApi.Managers.Interfaces;
 
 public interface IOutboxMessageManager
 {
-    Func<OutboxMessage, Task> GetStrategy(string messageName);
+    Func<OutboxMessage, Task> GetMessageHandler(string messageName);
 }

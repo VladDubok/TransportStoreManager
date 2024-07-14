@@ -23,7 +23,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductManager, ProductManager>();
 builder.Services.AddScoped<IFileManager, FileManager>();
 
-builder.Services.AddScoped<IOutboxMessageProcessHandler, OutboxMessageProcessHandler>();
+builder.Services.AddScoped<IOutboxMessageProcessor, OutboxMessageProcessor>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -45,4 +45,4 @@ app.MapControllers();
 app.UseHttpsRedirection();
 app.Run();
 
-RecurringJob.AddOrUpdate(() => app.Services.GetRequiredService<IOutboxMessageProcessHandler>().Handle(), Cron.Minutely);
+RecurringJob.AddOrUpdate(() => app.Services.GetRequiredService<IOutboxMessageProcessor>().Process(), Cron.Minutely);

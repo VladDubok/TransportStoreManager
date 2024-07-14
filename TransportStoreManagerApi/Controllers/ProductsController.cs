@@ -40,10 +40,12 @@ public class ProductsController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("upload-file")]
-    public async Task<IActionResult> UploadProductFile(IFormFile file)
+    [HttpPost("customer/{customerId}/upload-file")]
+    public async Task<IActionResult> UploadProductFile(
+        [FromRoute] long customerId,
+        IFormFile file)
     {
-        await _productManager.UploadProductFile(file);
+        await _productManager.UploadCustomerProductFile(file, customerId);
         
         return Ok();
     }

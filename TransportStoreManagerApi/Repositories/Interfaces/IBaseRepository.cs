@@ -9,5 +9,5 @@ public interface IBaseRepository<T>
     Task AddRangeAsync(IEnumerable<T> models);
     Task UpdateAsync(T model);
     Task UpdateRangeAsync(IEnumerable<T> models);
-    Task<T> GetByIdAsync(long id);
+    Task<T?> GetByIdAsync(long id);
 }

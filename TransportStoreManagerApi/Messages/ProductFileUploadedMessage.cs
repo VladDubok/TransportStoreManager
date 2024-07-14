@@ -1,11 +1,13 @@
 namespace TransportStoreManagerApi.Messages;
 
-public class ProductFileUploadedMessage
+public class ProductFileUploadedMessage : IMessage
 {
     public long FileId { get; set; }
+    public long CustomerId { get; set; }
 
-    public ProductFileUploadedMessage(long fileId)
+    public ProductFileUploadedMessage(long fileId, long customerId)
     {
         FileId = fileId;
+        CustomerId = customerId;
     }
 }

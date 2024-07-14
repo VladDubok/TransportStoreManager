@@ -10,16 +10,20 @@ public class OutboxMessageManager : IOutboxMessageManager
 {
     private readonly Dictionary<string, Func<OutboxMessage, Task>> _strategies = new();
     private readonly IFileManager _fileManager;
+    private readonly IProductManager _productManager;
 
-    public OutboxMessageManager(IFileManager fileManager)
+    public OutboxMessageManager(
+        IFileManager fileManager,
+        IProductManager productManager)
     {
         _fileManager = fileManager;
+        _productManager = productManager;
         _strategies.Add("product-file-uploaded", ProcessProductFileUploadMessageHandler);
     }
     
-    public Func<OutboxMessage, Task> GetStrategy(string messageName)
+    public Func<OutboxMessage, Task> GetMessageHandler(string messageName)
     {
-        // TODO: If strategy not exist, throw NotFoundMessageHandlerException
+        // TODO: If handler not exist, throw NotFoundMessageHandlerException
         return _strategies[messageName];
     }
     
@@ -28,7 +32,11 @@ public class OutboxMessageManager : IOutboxMessageManager
         var productFileUploadedMessage = JsonSerializer.Deserialize<ProductFileUploadedMessage>(message.Data);
         var products = await _fileManager.GetDataFromCsv<FileProductDto>(productFileUploadedMessage.FileId);
         
-        // update & insert products
+        foreach (var fileProductDto in products)
+        {
+            fileProductDto.CustomerId = productFileUploadedMessage.CustomerId;
+        }
         
+        await _productManager.UpdateFromFile(products);
     }
 }
