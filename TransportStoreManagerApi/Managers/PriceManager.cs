@@ -27,11 +27,28 @@ public class PriceManager : IPriceManager
             new ProductPrice
             {
                 Price = price,
-                CurrencyCode = code
+                CurrencyCode = code,
+                ProductId = productId
             }
         };
 
         await _priceRepository.AddRangeAsync(prices);
+    }
+
+    public async Task UpdateProductPriceAsync(long productId, decimal price, string code)
+    {
+        if (!IsValidCurrencyCode(code))
+        {
+            Log.Error("Currency code {0}, is not valid");
+            // TODO: Create InvalidCurrencyCodeException
+            throw new Exception("InvalidCurrencyCode");
+        }
+        
+        var productPrices = await _priceRepository.GetAllAsync(x => x.ProductId == productId);
+        var currencyPrice = productPrices.First(x => x.CurrencyCode == code);
+        currencyPrice.Price = price;
+
+        await _priceRepository.UpdateAsync(currencyPrice);
     }
 
     private bool IsValidCurrencyCode(string code)

@@ -17,11 +17,15 @@ builder.Services
     .AddHangfire(configuration => configuration.UseSqlServerStorage(connectionString))
     .AddHangfireServer();
 
+builder.Services.AddScoped<AppDbContext>();
 builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddScoped<IProductManager, ProductManager>();
 builder.Services.AddScoped<IFileManager, FileManager>();
+builder.Services.AddScoped<IPriceManager, PriceManager>();
+builder.Services.AddScoped<IBrandManager, BrandManager>();
+builder.Services.AddScoped<IOutboxMessageManager, OutboxMessageManager>();
 
 builder.Services.AddScoped<IOutboxMessageProcessor, OutboxMessageProcessor>();
 
@@ -43,6 +47,9 @@ app.UseRouting();
 app.MapHangfireDashboard();
 app.MapControllers();
 app.UseHttpsRedirection();
-app.Run();
 
-RecurringJob.AddOrUpdate(() => app.Services.GetRequiredService<IOutboxMessageProcessor>().Process(), Cron.Minutely);
+using var scope = app.Services.CreateScope();
+RecurringJob.AddOrUpdate(() => scope.ServiceProvider.GetRequiredService<IOutboxMessageProcessor>().Process(),
+    Cron.Hourly);
+
+app.Run();

@@ -35,7 +35,7 @@ public class ProductsController : ControllerBase
         [FromRoute] long id,
         [FromBody] UpdateProductRequestModel request)
     {
-        await _productManager.UpdateAsync(id, request);
+        await _productManager.UpdateProductAsync(id, request);
 
         return Ok();
     }

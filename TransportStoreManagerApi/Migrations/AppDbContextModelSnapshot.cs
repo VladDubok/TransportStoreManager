@@ -60,40 +60,6 @@ namespace TransportStoreManagerApi.Migrations
                     b.ToTable("Brands");
                 });
 
-            modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Currency", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Currencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "USD"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Name = "EUR"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Name = "UAH"
-                        });
-                });
-
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Customer", b =>
                 {
                     b.Property<long>("Id")
@@ -111,7 +77,7 @@ namespace TransportStoreManagerApi.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.OutboxMessages", b =>
+            modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.OutboxMessage", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,6 +92,12 @@ namespace TransportStoreManagerApi.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -143,9 +115,6 @@ namespace TransportStoreManagerApi.Migrations
                     b.Property<long>("BrandId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("BrandId1")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -153,25 +122,10 @@ namespace TransportStoreManagerApi.Migrations
                     b.Property<long>("Count")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CurrencyId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("CurrencyId1")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CustomerId1")
-                        .HasColumnType("bigint");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<long>("ProductTypeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ProductTypeId1")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Year")
@@ -181,19 +135,9 @@ namespace TransportStoreManagerApi.Migrations
 
                     b.HasIndex("BrandId");
 
-                    b.HasIndex("BrandId1");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("CurrencyId1");
-
                     b.HasIndex("CustomerId");
 
-                    b.HasIndex("CustomerId1");
-
                     b.HasIndex("ProductTypeId");
-
-                    b.HasIndex("ProductTypeId1");
 
                     b.ToTable("Products");
                 });
@@ -206,29 +150,44 @@ namespace TransportStoreManagerApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<long?>("BlobFileId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("FileId")
+                    b.Property<long>("BlobFileId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ProductId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ProductId1")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BlobFileId");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductPhotos");
+                });
+
+            modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPrice", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("CurrencyCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("ProductId1");
-
-                    b.ToTable("ProductPhotos");
+                    b.ToTable("ProductsPrices");
                 });
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPromotion", b =>
@@ -242,24 +201,14 @@ namespace TransportStoreManagerApi.Migrations
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ProductId1")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("PromotionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("PromotionId1")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("ProductId1");
-
                     b.HasIndex("PromotionId");
-
-                    b.HasIndex("PromotionId1");
 
                     b.ToTable("ProductPromotions");
                 });
@@ -287,17 +236,12 @@ namespace TransportStoreManagerApi.Migrations
                     b.Property<long>("ProductPromotionId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ProductPromotionId1")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductPromotionId");
-
-                    b.HasIndex("ProductPromotionId1");
 
                     b.ToTable("ProductPromotionHistories");
                 });
@@ -356,48 +300,24 @@ namespace TransportStoreManagerApi.Migrations
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Product", b =>
                 {
                     b.HasOne("TransportStoreManagerApi.Data.Entities.Brand", "Brand")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("BrandId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.Brand", null)
-                        .WithMany("Products")
-                        .HasForeignKey("BrandId1");
-
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.Currency", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.Currency", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CurrencyId1");
-
                     b.HasOne("TransportStoreManagerApi.Data.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.Customer", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CustomerId1");
-
                     b.HasOne("TransportStoreManagerApi.Data.Entities.ProductType", "ProductType")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.ProductType", null)
-                        .WithMany("Products")
-                        .HasForeignKey("ProductTypeId1");
-
                     b.Navigation("Brand");
-
-                    b.Navigation("Currency");
 
                     b.Navigation("Customer");
 
@@ -406,27 +326,30 @@ namespace TransportStoreManagerApi.Migrations
 
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPhoto", b =>
                 {
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.BlobFile", null)
-                        .WithMany("ProductPhotos")
-                        .HasForeignKey("BlobFileId");
-
                     b.HasOne("TransportStoreManagerApi.Data.Entities.BlobFile", "BlobFile")
-                        .WithMany()
-                        .HasForeignKey("FileId")
+                        .WithMany("ProductPhotos")
+                        .HasForeignKey("BlobFileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TransportStoreManagerApi.Data.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductPhotos")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.Product", null)
-                        .WithMany("ProductPhotos")
-                        .HasForeignKey("ProductId1");
-
                     b.Navigation("BlobFile");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPrice", b =>
+                {
+                    b.HasOne("TransportStoreManagerApi.Data.Entities.Product", "Product")
+                        .WithMany("ProductPrices")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
                 });
@@ -434,24 +357,16 @@ namespace TransportStoreManagerApi.Migrations
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPromotion", b =>
                 {
                     b.HasOne("TransportStoreManagerApi.Data.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductPromotions")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.Product", null)
-                        .WithMany("ProductPromotions")
-                        .HasForeignKey("ProductId1");
-
                     b.HasOne("TransportStoreManagerApi.Data.Entities.Promotion", "Promotion")
-                        .WithMany()
+                        .WithMany("ProductPromotions")
                         .HasForeignKey("PromotionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.Promotion", null)
-                        .WithMany("ProductPromotions")
-                        .HasForeignKey("PromotionId1");
 
                     b.Navigation("Product");
 
@@ -461,14 +376,10 @@ namespace TransportStoreManagerApi.Migrations
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.ProductPromotionHistory", b =>
                 {
                     b.HasOne("TransportStoreManagerApi.Data.Entities.ProductPromotion", "ProductPromotion")
-                        .WithMany()
+                        .WithMany("ProductPromotionHistories")
                         .HasForeignKey("ProductPromotionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("TransportStoreManagerApi.Data.Entities.ProductPromotion", null)
-                        .WithMany("ProductPromotionHistories")
-                        .HasForeignKey("ProductPromotionId1");
 
                     b.Navigation("ProductPromotion");
                 });
@@ -483,11 +394,6 @@ namespace TransportStoreManagerApi.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Currency", b =>
-                {
-                    b.Navigation("Products");
-                });
-
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Customer", b =>
                 {
                     b.Navigation("Products");
@@ -496,6 +402,8 @@ namespace TransportStoreManagerApi.Migrations
             modelBuilder.Entity("TransportStoreManagerApi.Data.Entities.Product", b =>
                 {
                     b.Navigation("ProductPhotos");
+
+                    b.Navigation("ProductPrices");
 
                     b.Navigation("ProductPromotions");
                 });

@@ -6,6 +6,6 @@ public class ProductPhoto : BaseEntity
     
     public long ProductId { get; set; }
     public Product Product { get; set; }
-    public long FileId { get; set; }
+    public long BlobFileId { get; set; }
     public BlobFile BlobFile { get; set; }
 }

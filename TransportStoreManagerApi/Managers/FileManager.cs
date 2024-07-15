@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Text;
 using CsvHelper;
+using CsvHelper.Configuration;
 using TransportStoreManagerApi.Data.Entities;
 using TransportStoreManagerApi.Managers.Interfaces;
 using TransportStoreManagerApi.Repositories;
@@ -33,7 +34,10 @@ public class FileManager: IFileManager
         var blobFile = await _fileRepository.GetByIdAsync(fileId);
         using var memStream = new MemoryStream(blobFile.Data);
         using var reader = new StreamReader(memStream);
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        return csv.GetRecords<T>();
+        var configuration = new CsvConfiguration(CultureInfo.InvariantCulture);
+        configuration.Delimiter = ";";
+        configuration.HasHeaderRecord = true;
+        using var csv = new CsvReader(reader, configuration, true);
+        return csv.GetRecords<T>().ToList();
     }
 }

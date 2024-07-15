@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TransportStoreManagerApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class Add_Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,19 +25,6 @@ namespace TransportStoreManagerApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brands", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Currencies",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Currencies", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -71,7 +60,9 @@ namespace TransportStoreManagerApi.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,16 +105,10 @@ namespace TransportStoreManagerApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Count = table.Column<long>(type: "bigint", nullable: false),
                     BrandId = table.Column<long>(type: "bigint", nullable: false),
                     ProductTypeId = table.Column<long>(type: "bigint", nullable: false),
-                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
-                    CurrencyId = table.Column<long>(type: "bigint", nullable: false),
-                    BrandId1 = table.Column<long>(type: "bigint", nullable: true),
-                    CurrencyId1 = table.Column<long>(type: "bigint", nullable: true),
-                    CustomerId1 = table.Column<long>(type: "bigint", nullable: true),
-                    ProductTypeId1 = table.Column<long>(type: "bigint", nullable: true)
+                    CustomerId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,43 +120,17 @@ namespace TransportStoreManagerApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_Brands_BrandId1",
-                        column: x => x.BrandId1,
-                        principalTable: "Brands",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Products_Currencies_CurrencyId",
-                        column: x => x.CurrencyId,
-                        principalTable: "Currencies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_Currencies_CurrencyId1",
-                        column: x => x.CurrencyId1,
-                        principalTable: "Currencies",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Products_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_Customers_CustomerId1",
-                        column: x => x.CustomerId1,
-                        principalTable: "Customers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Products_ProductTypes_ProductTypeId",
                         column: x => x.ProductTypeId,
                         principalTable: "ProductTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_ProductTypes_ProductTypeId1",
-                        column: x => x.ProductTypeId1,
-                        principalTable: "ProductTypes",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -181,9 +140,7 @@ namespace TransportStoreManagerApi.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    FileId = table.Column<long>(type: "bigint", nullable: false),
-                    BlobFileId = table.Column<long>(type: "bigint", nullable: true),
-                    ProductId1 = table.Column<long>(type: "bigint", nullable: true)
+                    BlobFileId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -191,11 +148,6 @@ namespace TransportStoreManagerApi.Migrations
                     table.ForeignKey(
                         name: "FK_ProductPhotos_Files_BlobFileId",
                         column: x => x.BlobFileId,
-                        principalTable: "Files",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ProductPhotos_Files_FileId",
-                        column: x => x.FileId,
                         principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -205,11 +157,6 @@ namespace TransportStoreManagerApi.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductPhotos_Products_ProductId1",
-                        column: x => x.ProductId1,
-                        principalTable: "Products",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -219,9 +166,7 @@ namespace TransportStoreManagerApi.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<long>(type: "bigint", nullable: false),
-                    PromotionId = table.Column<long>(type: "bigint", nullable: false),
-                    ProductId1 = table.Column<long>(type: "bigint", nullable: true),
-                    PromotionId1 = table.Column<long>(type: "bigint", nullable: true)
+                    PromotionId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -233,21 +178,32 @@ namespace TransportStoreManagerApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductPromotions_Products_ProductId1",
-                        column: x => x.ProductId1,
-                        principalTable: "Products",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_ProductPromotions_Promotions_PromotionId",
                         column: x => x.PromotionId,
                         principalTable: "Promotions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductsPrices",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CurrencyCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductsPrices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductPromotions_Promotions_PromotionId1",
-                        column: x => x.PromotionId1,
-                        principalTable: "Promotions",
-                        principalColumn: "Id");
+                        name: "FK_ProductsPrices_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -261,8 +217,7 @@ namespace TransportStoreManagerApi.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    ProductPromotionId = table.Column<long>(type: "bigint", nullable: false),
-                    ProductPromotionId1 = table.Column<long>(type: "bigint", nullable: true)
+                    ProductPromotionId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -273,11 +228,15 @@ namespace TransportStoreManagerApi.Migrations
                         principalTable: "ProductPromotions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductPromotionHistories_ProductPromotions_ProductPromotionId1",
-                        column: x => x.ProductPromotionId1,
-                        principalTable: "ProductPromotions",
-                        principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "ProductTypes",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1L, "Car" },
+                    { 2L, "Motorcycle" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -286,19 +245,9 @@ namespace TransportStoreManagerApi.Migrations
                 column: "BlobFileId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPhotos_FileId",
-                table: "ProductPhotos",
-                column: "FileId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductPhotos_ProductId",
                 table: "ProductPhotos",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductPhotos_ProductId1",
-                table: "ProductPhotos",
-                column: "ProductId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductPromotionHistories_ProductPromotionId",
@@ -306,19 +255,9 @@ namespace TransportStoreManagerApi.Migrations
                 column: "ProductPromotionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotionHistories_ProductPromotionId1",
-                table: "ProductPromotionHistories",
-                column: "ProductPromotionId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductPromotions_ProductId",
                 table: "ProductPromotions",
                 column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotions_ProductId1",
-                table: "ProductPromotions",
-                column: "ProductId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductPromotions_PromotionId",
@@ -326,29 +265,9 @@ namespace TransportStoreManagerApi.Migrations
                 column: "PromotionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductPromotions_PromotionId1",
-                table: "ProductPromotions",
-                column: "PromotionId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_BrandId",
                 table: "Products",
                 column: "BrandId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_BrandId1",
-                table: "Products",
-                column: "BrandId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_CurrencyId",
-                table: "Products",
-                column: "CurrencyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_CurrencyId1",
-                table: "Products",
-                column: "CurrencyId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CustomerId",
@@ -356,19 +275,14 @@ namespace TransportStoreManagerApi.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CustomerId1",
-                table: "Products",
-                column: "CustomerId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_ProductTypeId",
                 table: "Products",
                 column: "ProductTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_ProductTypeId1",
-                table: "Products",
-                column: "ProductTypeId1");
+                name: "IX_ProductsPrices_ProductId",
+                table: "ProductsPrices",
+                column: "ProductId");
         }
 
         /// <inheritdoc />
@@ -384,6 +298,9 @@ namespace TransportStoreManagerApi.Migrations
                 name: "ProductPromotionHistories");
 
             migrationBuilder.DropTable(
+                name: "ProductsPrices");
+
+            migrationBuilder.DropTable(
                 name: "Files");
 
             migrationBuilder.DropTable(
@@ -397,9 +314,6 @@ namespace TransportStoreManagerApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Brands");
-
-            migrationBuilder.DropTable(
-                name: "Currencies");
 
             migrationBuilder.DropTable(
                 name: "Customers");

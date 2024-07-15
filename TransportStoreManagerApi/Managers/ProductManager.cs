@@ -46,8 +46,11 @@ public class ProductManager : IProductManager
 
     public async Task CreateProductAsync(AddProductRequestModel model)
     {
+        var brand = await _brandManager.GetOrCreate(model.BrandName, model.BrandModel);
         var product = _mapper.Map<Product>(model);
+        product.Brand = brand;
         await _productRepository.AddAsync(product);
+        await _priceManager.CreatePricesAsync(model.CurrencyCode, model.Price, product.Id);
     }
 
     public async Task<IEnumerable<GetCustomerProductResponseModel>> GetCustomerProductsAsync(long customerId)
@@ -57,12 +60,25 @@ public class ProductManager : IProductManager
         return _mapper.Map<IEnumerable<GetCustomerProductResponseModel>>(customerProducts);
     }
 
-    public async Task UpdateAsync(long id, UpdateProductRequestModel request)
+    public async Task UpdateProductAsync(long id, UpdateProductRequestModel request)
     {
-        var toUpdateProduct = _mapper.Map<Product>(request);
-        toUpdateProduct.Id = id;
+        var brand = await _brandManager.GetOrCreate(request.BrandName, request.BrandModel);
+        var product = await _productRepository.GetByIdAsync(id);
+        
+        if (product is null)
+        {
+            throw new Exception($"Product with id: {id} was not found");
+        }
 
-        await _productRepository.UpdateAsync(toUpdateProduct);
+        product.Color = request.Color;
+        product.Year = request.Year;
+        product.Count = request.Count;
+        product.Brand = brand;
+        product.ProductTypeId = request.ProductTypeId;
+        await _priceManager.UpdateProductPriceAsync(product.Id, request.Price, request.CurrencyCode);
+        
+
+        await _productRepository.UpdateAsync(product);
     }
 
     public async Task UploadCustomerProductFile(IFormFile file, long customerId)
@@ -101,13 +117,15 @@ public class ProductManager : IProductManager
         {
             foreach (var productDto in products)
             {
-                var productTypeId = await _productTypeRepository.GetByIdAsync(productDto.ProductTypeId);
-                
-                var brandId = await _brandManager.GetOrCreate(productDto.BrandName, productDto.BrandModel);
+                if (productDto.Id is null)
+                {
+                    var addProductModel = _mapper.Map<AddProductRequestModel>(productDto);
+                    await CreateProductAsync(addProductModel);
+                    continue;
+                }
 
-                var productId = 0;
-                
-                await _priceManager.CreatePricesAsync(productDto.CurrencyCode, productDto.Price, productId);
+                var updateProductModel = _mapper.Map<UpdateProductRequestModel>(productDto);
+                await UpdateProductAsync(productDto.Id.Value, updateProductModel);
             }
             
             await transaction.CommitAsync();

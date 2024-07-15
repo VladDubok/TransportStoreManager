@@ -12,22 +12,22 @@ public class BrandManager : IBrandManager
         _brandRepository = brandRepository;
     }
 
-    public async Task<long> GetOrCreate(string name, string model)
+    public async Task<Brand> GetOrCreate(string name, string model)
     {
         var brands = await _brandRepository.GetAllAsync(x => x.Name == name && x.Model == model);
-        var brandId = brands.FirstOrDefault()?.Id;
-                
-        if (brandId is null)
+
+        if (brands.FirstOrDefault() is not null)
         {
-            var newBrand = new Brand
-            {
-                Name = name,
-                Model = model,
-            };
-            await _brandRepository.AddAsync(newBrand);
-            brandId = newBrand.Id;
+            return brands.First();
         }
 
-        return brandId.Value;
+        var newBrand = new Brand
+        {
+            Name = name,
+            Model = model,
+        };
+        await _brandRepository.AddAsync(newBrand);
+
+        return newBrand;
     }
 }
