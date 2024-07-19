@@ -14,7 +14,7 @@ public class Product : BaseEntity
     public long CustomerId { get; set; }
     public Customer Customer { get; set; }
     
-    public IEnumerable<ProductPrice> ProductPrices { get; set; }
-    public IEnumerable<ProductPhoto> ProductPhotos { get; set; }
-    public IEnumerable<ProductPromotion> ProductPromotions { get; set; }
+    public List<ProductPrice> ProductPrices { get; set; }
+    public List<ProductPhoto> ProductPhotos { get; set; }
+    public List<ProductPromotion> ProductPromotions { get; set; }
 }

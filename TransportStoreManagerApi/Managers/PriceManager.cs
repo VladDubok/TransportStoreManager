@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using TransportStoreManagerApi.Data.Entities;
+using TransportStoreManagerApi.Managers.Interfaces;
 using TransportStoreManagerApi.Repositories.Interfaces;
 
 namespace TransportStoreManagerApi.Managers;
@@ -21,7 +23,7 @@ public class PriceManager : IPriceManager
             // TODO: Create InvalidCurrencyCodeException
             throw new Exception("InvalidCurrencyCode");
         }
-
+        
         var prices = new List<ProductPrice>
         {
             new ProductPrice
@@ -44,7 +46,7 @@ public class PriceManager : IPriceManager
             throw new Exception("InvalidCurrencyCode");
         }
         
-        var productPrices = await _priceRepository.GetAllAsync(x => x.ProductId == productId);
+        var productPrices = await _priceRepository.GetAll().Where(x => x.ProductId == productId).ToListAsync();
         var currencyPrice = productPrices.First(x => x.CurrencyCode == code);
         currencyPrice.Price = price;
 

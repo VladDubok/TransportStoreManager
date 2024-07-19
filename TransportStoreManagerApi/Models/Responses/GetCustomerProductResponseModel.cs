@@ -1,4 +1,6 @@
 
+using TransportStoreManagerApi.Data.Entities;
+
 namespace TransportStoreManagerApi.Models.Responses;
 
 public class GetCustomerProductResponseModel
@@ -11,6 +13,15 @@ public class GetCustomerProductResponseModel
     public int Year { get; set; }
     public long Count { get; set; }
     public IEnumerable<ProductPriceModel> Prices { get; set; }
+    public IEnumerable<ProductPromotionModel> Promotions { get; set; }
+}
+
+public class ProductPromotionModel
+{
+    public int Percent { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public bool IsActive { get; set; }
 }
 
 public class ProductPriceModel

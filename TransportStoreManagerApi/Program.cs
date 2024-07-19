@@ -26,6 +26,7 @@ builder.Services.AddScoped<IFileManager, FileManager>();
 builder.Services.AddScoped<IPriceManager, PriceManager>();
 builder.Services.AddScoped<IBrandManager, BrandManager>();
 builder.Services.AddScoped<IOutboxMessageManager, OutboxMessageManager>();
+builder.Services.AddScoped<IPromotionManager, PromotionManager>();
 
 builder.Services.AddScoped<IOutboxMessageProcessor, OutboxMessageProcessor>();
 

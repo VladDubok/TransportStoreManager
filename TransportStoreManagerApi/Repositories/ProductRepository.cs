@@ -21,6 +21,8 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
             .Include(x => x.Brand)
             .Include(x => x.ProductPrices)
             .Include(x => x.ProductType)
+            .Include(x => x.ProductPromotions)
+                .ThenInclude(x => x.Promotion)
             .Where(x => x.CustomerId == customerId)
             .ToListAsync();
 

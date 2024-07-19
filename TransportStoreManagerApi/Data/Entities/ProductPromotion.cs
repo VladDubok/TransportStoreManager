@@ -8,5 +8,7 @@ public class ProductPromotion : BaseEntity
     public Product Product { get; set; }
     public long PromotionId { get; set; }
     public Promotion Promotion { get; set; }
-    public IEnumerable<ProductPromotionHistory> ProductPromotionHistories { get; set; }
+    public bool IsActive { get; set; }
+    
+    public List<ProductPromotionHistory> ProductPromotionHistories { get; set; }
 }

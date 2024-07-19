@@ -1,6 +1,6 @@
 using TransportStoreManagerApi.Data.Entities;
 
-namespace TransportStoreManagerApi.Managers;
+namespace TransportStoreManagerApi.Managers.Interfaces;
 
 public interface IBrandManager
 {

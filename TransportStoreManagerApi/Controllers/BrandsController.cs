@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TransportStoreManagerApi.Data.Entities;
 using TransportStoreManagerApi.Models.Requests;
 using TransportStoreManagerApi.Repositories;
@@ -23,7 +24,7 @@ public class BrandsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllBrands()
     {
-        var brands = await _brandRepository.GetAllAsync();
+        var brands = await _brandRepository.GetAll().ToListAsync();
 
         return Ok(brands);
     }

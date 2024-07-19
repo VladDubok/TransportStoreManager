@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using TransportStoreManagerApi.Data.Entities;
+using TransportStoreManagerApi.Managers.Interfaces;
 using TransportStoreManagerApi.Repositories.Interfaces;
 
 namespace TransportStoreManagerApi.Managers;
@@ -14,7 +16,7 @@ public class BrandManager : IBrandManager
 
     public async Task<Brand> GetOrCreate(string name, string model)
     {
-        var brands = await _brandRepository.GetAllAsync(x => x.Name == name && x.Model == model);
+        var brands = await _brandRepository.GetAll().Where(x => x.Name == name && x.Model == model).ToListAsync();
 
         if (brands.FirstOrDefault() is not null)
         {

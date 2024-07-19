@@ -16,16 +16,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         _context = context;
     }
 
-    public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? expression)
+    public IQueryable<T> GetAll()
     {
-        var query = _context.Set<T>().AsQueryable();
-
-        if (expression is not null)
-        {
-            query = query.Where(expression);
-        }
-
-        return await query.ToListAsync();
+        return _context.Set<T>().AsQueryable();
     }
 
     public async Task AddAsync(T model)
@@ -62,5 +55,10 @@ public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
         }
 
         return result;
+    }
+
+    public async Task<List<T>> GetByIdsAsync(IEnumerable<long> ids)
+    {
+        return await _context.Set<T>().Where(x => ids.Contains(x.Id)).ToListAsync();
     }
 }

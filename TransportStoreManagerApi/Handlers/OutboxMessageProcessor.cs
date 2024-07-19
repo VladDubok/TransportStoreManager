@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using TransportStoreManagerApi.Data.Entities;
 using TransportStoreManagerApi.Data.Entities.Enums;
 using TransportStoreManagerApi.Managers.Interfaces;
@@ -18,7 +19,7 @@ public class OutboxMessageProcessor : IOutboxMessageProcessor
 
     public async Task Process()
     {
-        var messages = await _outboxRepository.GetAllAsync(x => x.Status == MessageStatusEnum.Created);
+        var messages = await _outboxRepository.GetAll().Where(x => x.Status == MessageStatusEnum.Created).ToListAsync();
 
         foreach (var outboxMessage in messages)
         {

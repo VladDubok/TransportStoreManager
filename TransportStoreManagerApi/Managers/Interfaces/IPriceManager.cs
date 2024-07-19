@@ -1,4 +1,4 @@
-namespace TransportStoreManagerApi.Managers;
+namespace TransportStoreManagerApi.Managers.Interfaces;
 
 public interface IPriceManager
 {
