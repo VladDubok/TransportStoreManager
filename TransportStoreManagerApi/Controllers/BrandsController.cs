@@ -20,7 +20,7 @@ public class BrandsController : ControllerBase
         _mapper = mapper;
         _brandRepository = brandRepository;
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> GetAllBrands()
     {

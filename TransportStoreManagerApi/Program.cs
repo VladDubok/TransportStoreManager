@@ -1,5 +1,6 @@
 using Hangfire;
 using Microsoft.EntityFrameworkCore;
+using TransportStoreManagerApi.Adapters;
 using TransportStoreManagerApi.Data;
 using TransportStoreManagerApi.Handlers;
 using TransportStoreManagerApi.Managers;
@@ -29,6 +30,13 @@ builder.Services.AddScoped<IOutboxMessageManager, OutboxMessageManager>();
 builder.Services.AddScoped<IPromotionManager, PromotionManager>();
 
 builder.Services.AddScoped<IOutboxMessageProcessor, OutboxMessageProcessor>();
+
+builder.Services.AddScoped<IFrankfurterCurrencyExchangeAdapter, FrankfurterCurrencyExchangeAdapter>();
+builder.Services.AddHttpClient<IFrankfurterCurrencyExchangeAdapter, FrankfurterCurrencyExchangeAdapter>(client =>
+{
+    client.BaseAddress = new Uri("https://www.frankfurter.app");    
+});
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
